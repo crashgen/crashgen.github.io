@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="description" content="CrashGen: Learned Red-Teaming for Grasp Robustness Under Geometric Variation">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>CrashGen</title>
+
+    <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+
+    <link rel="stylesheet" href="./static/css/bulma.min.css">
+    <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+    <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+    <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+    <link rel="stylesheet" href="./static/css/academicons.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+    <link rel="stylesheet" href="./static/css/index.css">
+
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script defer src="./static/js/fontawesome.all.min.js"></script>
+    <script src="./static/js/bulma-carousel.min.js"></script>
+    <script src="./static/js/bulma-slider.min.js"></script>
+    <script src="./static/js/index.js"></script>
+
+    <style>
+        :root {
+            --accent: #1f6feb;
+            --ink: #222;
+            --muted: #6b7280;
+            --sectionY: clamp(0.25rem, 0.25vw, 0.25rem);
+        }
+
+        html, body { color: var(--ink); }
+
+        .section { padding-top: var(--sectionY); padding-bottom: var(--sectionY); }
+
+        .title { margin-bottom: .6rem; line-height: 1.15; letter-spacing: -0.015em; }
+        .content p { margin-bottom: .75rem; }
+
+        figure.image { margin: 1rem auto !important; }
+
+        .hero .hero-body { padding: clamp(1rem, 3vw, 2rem) 0 1rem; }
+
+        .publication-title {
+            font-family: "Google Sans", system-ui, -apple-system, Segoe UI, Roboto, "Noto Sans", sans-serif;
+            font-size: clamp(1.8rem, 4.4vw, 3rem);
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            margin-bottom: .4rem;
+        }
+
+        .publication-authors { margin-top: .25rem; }
+
+        .teaser-figure img {
+            border-radius: 6px;
+            max-height: 75vh;
+            width: auto;
+            max-width: 100%;
+        }
+
+        .figure-caption {
+            max-width: 880px;
+            margin: 0.75rem auto 0;
+            color: var(--ink);
+            font-size: 1rem;
+            line-height: 1.5;
+            text-align: justify;
+        }
+
+        /* Swiper slide layout */
+        .results-swiper {
+            width: 100%;
+            max-width: 960px;
+            margin: 1.5rem auto;
+            padding-bottom: 2.5rem;
+        }
+        .results-swiper .swiper-slide {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 0 2.5rem;
+            box-sizing: border-box;
+            height: auto;
+        }
+        .slide-content {
+            text-align: center;
+            width: 100%;
+        }
+        .slide-content .slide-caption {
+            margin: 0.75rem auto 0;
+            font-size: 0.95rem;
+            color: var(--ink);
+            max-width: 820px;
+            text-align: justify;
+            line-height: 1.5;
+        }
+        .slide-content img {
+            max-height: 420px;
+            width: auto;
+            max-width: 100%;
+            object-fit: contain;
+            display: block;
+            margin: 0 auto;
+        }
+
+        /* Results table */
+        .results-table {
+            margin: 0 auto;
+            border-collapse: collapse;
+            font-size: 0.95rem;
+        }
+        .results-table th, .results-table td {
+            padding: 0.5rem 0.9rem;
+            text-align: center;
+        }
+        .results-table thead th {
+            border-top: 2px solid #222;
+            border-bottom: 1px solid #222;
+            font-weight: 600;
+        }
+        .results-table tbody tr:last-child td {
+            border-bottom: 2px solid #222;
+        }
+        .results-table td.method-name {
+            text-align: left;
+        }
+        .results-table tr.blue-team-row {
+            background-color: #eaf2fc;
+        }
+
+        .slide-title {
+            font-family: "Google Sans", system-ui, sans-serif;
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: var(--accent);
+            margin-bottom: 0.75rem;
+            letter-spacing: -0.01em;
+        }
+
+        .swiper-button-next, .swiper-button-prev {
+            color: var(--accent);
+        }
+        .swiper-pagination-bullet-active {
+            background: var(--accent);
+        }
+
+        .coming-soon {
+            text-align: center;
+            color: var(--muted);
+            font-style: italic;
+            padding: 2rem 0 3rem;
+            font-size: 1.1rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <section class="hero">
+        <div class="hero-body">
+            <div class="container is-max-desktop">
+                <div class="columns is-centered">
+                    <div class="column has-text-centered">
+                        <h1 class="title is-2 publication-title">
+                            CrashGen: Learned Red-Teaming for Grasp Robustness Under Geometric Variation
+                        </h1>
+                        <div class="is-size-5 publication-authors">
+                            <span class="author-block">Anonymous Submission</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="hero teaser">
+        <div class="container is-max-desktop">
+            <div class="hero-body">
+                <figure class="teaser-figure has-text-centered">
+                    <img src="./assets/figures/teaser.png" alt="CrashGen teaser figure.">
+                </figure>
+                <p class="figure-caption">
+                    <b>CrashGen-guided blue-teaming.</b>
+                    Standard fine-tuning on the original training objects can leave geometric failure
+                    modes unresolved. CrashGen generates diverse CrashShapes from the training objects
+                    and uses them for blue-teaming. Fine-tuning on these generated variants improves
+                    real-world grasp behavior on held-out objects under geometric variation.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container is-max-desktop">
+            <div class="columns is-centered has-text-centered">
+                <div class="column is-four-fifths">
+                    <h2 class="title is-3">Abstract</h2>
+                    <div class="content has-text-justified">
+                        <p>
+                            Data-driven robotic grasping policies often transfer poorly to held-out
+                            objects from a target object category. Fine-tuning on a small set of
+                            original training meshes can improve performance near those shapes, but
+                            cannot span the geometric variants that cause failures at test time. A
+                            direct way to obtain such variants is geometric red-teaming, which searches
+                            over constrained shape deformations to find geometries on which a frozen
+                            manipulation policy fails, but this simulator-in-the-loop search takes
+                            hours per object and cannot be used at training-data scale.
+                        </p>
+                        <p>
+                            We introduce <b>CrashGen</b>, a point-cloud-conditioned diffusion model
+                            that amortizes this search by generating failure-inducing deformation
+                            controls in seconds; a Jacobian-field operator maps each control to a
+                            physically plausible deformation of the original mesh. Trained once on
+                            failure-inducing controls discovered by running this search offline,
+                            CrashGen generates such variants for over 80% of held-out objects under
+                            simulation validation.
+                        </p>
+                        <p>
+                            Fine-tuning an off-the-shelf grasp policy (Contact-GraspNet) on a mix of
+                            original meshes and CrashGen variants improves grasp success on held-out
+                            objects by up to 21% in simulation and 30% on a real robot, relative to a
+                            baseline trained only on the original meshes. Together, these results show
+                            that amortized geometric red-teaming turns an expensive failure-discovery
+                            procedure into scalable training data for robustifying grasp policies
+                            against geometric variation.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="hero teaser" id="system-overview">
+        <div class="container is-max-desktop">
+            <div class="columns is-centered has-text-centered">
+                <h2 class="title is-3" style="margin-top: 40px;">System Overview</h2>
+            </div>
+            <div class="hero-body">
+                <figure class="teaser-figure has-text-centered">
+                    <img src="./assets/figures/system_overview.png" alt="CrashGen system overview.">
+                </figure>
+                <p class="figure-caption">
+                    <b>Generating CrashShapes.</b>
+                    CrashGen diffuses over handle-point displacements rather than meshes. The model
+                    conditions on the original point cloud and handle mask, then predicts sparse
+                    displacement controls over the handle-supported subspace. A deterministic
+                    Jacobian-field solver maps each sampled control field to an admissible mesh
+                    deformation, yielding <i>K</i> CrashShapes.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section class="hero teaser" id="quantitative-results">
+        <div class="container is-max-desktop">
+            <div class="columns is-centered has-text-centered">
+                <h2 class="title is-3" style="margin-top: 40px;">Quantitative Results</h2>
+            </div>
+
+            <div class="swiper results-swiper">
+                <div class="swiper-wrapper">
+
+                    <!-- Slide 1: Distillation table -->
+                    <div class="swiper-slide">
+                        <div class="slide-content">
+                            <p class="slide-title">Simulation: distillation on 100 held-out ShapeNetSem objects</p>
+                            <table class="results-table">
+                                <thead>
+                                    <tr>
+                                        <th>Method</th>
+                                        <th>Coverage &uarr;</th>
+                                        <th>Final Drop &uarr;</th>
+                                        <th>&Delta;Complexity &darr;</th>
+                                        <th>Time / CrashShape (s) &darr;</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="method-name">GRT oracle</td>
+                                        <td>92%</td>
+                                        <td>62.94</td>
+                                        <td>0.035</td>
+                                        <td>9000</td>
+                                    </tr>
+                                    <tr class="blue-team-row">
+                                        <td class="method-name"><b>CrashGen (Ours)</b></td>
+                                        <td>83%</td>
+                                        <td>56.39</td>
+                                        <td>0.014</td>
+                                        <td>25</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="method-name">CrashGen (w/o masking)</td>
+                                        <td>39%</td>
+                                        <td>34.14</td>
+                                        <td>0.008</td>
+                                        <td>25</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <p class="slide-caption">
+                                <b>Distillation results on 100 held-out ShapeNetSem objects.</b>
+                                CrashGen preserves most of GRT's coverage and failure-inducing magnitude
+                                with a 360&times; per-sample speedup.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Slide 2: Blue-teaming sim table -->
+                    <div class="swiper-slide">
+                        <div class="slide-content">
+                            <p class="slide-title">Simulation: grasp success on held-out ShapeNetSem objects after fine-tuning</p>
+                            <table class="results-table">
+                                <thead>
+                                    <tr>
+                                        <th>Method</th>
+                                        <th>Vase</th>
+                                        <th>Bottle</th>
+                                        <th>Cup</th>
+                                        <th>Toy</th>
+                                        <th>Tool</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="method-name">Base &pi;<sub>&theta;</sub> (Contact-GraspNet)</td>
+                                        <td>43.2</td>
+                                        <td>49.9</td>
+                                        <td>73.6</td>
+                                        <td>56.2</td>
+                                        <td>58.6</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="method-name">Fine-tune, nominal only</td>
+                                        <td>51.8</td>
+                                        <td>45.8</td>
+                                        <td>70.9</td>
+                                        <td>46.0</td>
+                                        <td>57.9</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="method-name">Random deformations</td>
+                                        <td>55.0</td>
+                                        <td>33.9</td>
+                                        <td>69.1</td>
+                                        <td>35.7</td>
+                                        <td>61.9</td>
+                                    </tr>
+                                    <tr class="blue-team-row">
+                                        <td class="method-name">Blue-teaming, VLM mask</td>
+                                        <td>67.8</td>
+                                        <td>56.5</td>
+                                        <td>68.3</td>
+                                        <td>48.9</td>
+                                        <td><b>72.4</b></td>
+                                    </tr>
+                                    <tr class="blue-team-row">
+                                        <td class="method-name">Blue-teaming, multi-mask</td>
+                                        <td><b>73.0</b></td>
+                                        <td><b>62.0</b></td>
+                                        <td><b>78.2</b></td>
+                                        <td><b>62.4</b></td>
+                                        <td>70.2</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <p class="slide-caption">
+                                <b>Grasp success on held-out category objects after fine-tuning (percent).</b>
+                                Targeted CrashGen deformations outperform both untargeted baselines.
+                                Best result in <b>bold</b>.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Slide 3: Real-world results -->
+                    <div class="swiper-slide">
+                        <div class="slide-content">
+                            <p class="slide-title">Real-world: physical grasp success on held-out objects</p>
+                            <img src="./assets/figures/real_world_results.png" alt="Real-world validation results.">
+                            <p class="slide-caption">
+                                <b>Real-world validation.</b>
+                                Left: Overall grasp success.
+                                Right: Failure attribution analysis for each of the different methods.
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="swiper-pagination"></div>
+                <div class="swiper-button-prev"></div>
+                <div class="swiper-button-next"></div>
+            </div>
+        </div>
+    </section>
+
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <script>
+        var resultsSwiper = new Swiper('.results-swiper', {
+            loop: true,
+            autoHeight: true,
+            autoplay: {
+                delay: 6000,
+                disableOnInteraction: false,
+            },
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+            },
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+        });
+    </script>
+
+    <section class="section" id="demos">
+        <div class="container is-max-desktop">
+            <div class="columns is-centered has-text-centered">
+                <h2 class="title is-3" style="margin-top: 40px;">Demos</h2>
+            </div>
+            <p class="coming-soon">Coming soon.</p>
+        </div>
+    </section>
+</body>
+
+</html>
