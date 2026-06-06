@@ -154,6 +154,108 @@
             padding: 2rem 0 3rem;
             font-size: 1.1rem;
         }
+
+        /* Demos: category tabs */
+        .demo-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin: 1.5rem 0 1rem;
+        }
+        .demo-tab-btn {
+            padding: 8px 28px;
+            border-radius: 22px;
+            border: 2px solid var(--accent);
+            background: #fff;
+            color: var(--accent);
+            font-weight: 600;
+            font-size: 15px;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s;
+        }
+        .demo-tab-btn.is-active {
+            background: var(--accent);
+            color: #fff;
+        }
+        .demo-tab-btn:hover:not(.is-active) {
+            background: #eef3fc;
+        }
+
+        /* Demos: trial picker */
+        .demo-trial-row {
+            text-align: center;
+            margin: 0.5rem 0 1rem;
+        }
+        .demo-trial-hint {
+            font-size: 14px;
+            color: var(--muted);
+            font-style: italic;
+            margin-bottom: 0.6rem;
+        }
+        .demo-trial-strip {
+            display: inline-flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 8px;
+        }
+        .demo-trial-btn {
+            min-width: 38px;
+            padding: 6px 10px;
+            border-radius: 10px;
+            border: 1.5px solid #cbd5e1;
+            background: #fff;
+            color: #334155;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background 0.15s, color 0.15s, border-color 0.15s;
+        }
+        .demo-trial-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+        .demo-trial-btn.is-active {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: #fff;
+        }
+
+        /* Demos: side-by-side video pair */
+        .demo-pair {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+            margin: 1.5rem auto 0;
+            max-width: 900px;
+        }
+        .demo-cell {
+            text-align: center;
+        }
+        .demo-cell-label {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--ink);
+            font-size: 0.95rem;
+        }
+        .demo-cell.is-ours .demo-cell-label {
+            color: var(--accent);
+        }
+        .demo-cell video {
+            width: 100%;
+            /* Lock every cell to the aspect ratio of the most-square clip (720x780).
+               With object-fit: cover + object-position: center bottom, this means each
+               paired video renders at identical dimensions and any excess height is
+               shaved from the top (where the workspace is mostly empty). */
+            aspect-ratio: 12 / 13;
+            object-fit: cover;
+            object-position: center bottom;
+            border-radius: 8px;
+            display: block;
+            background: #000;
+        }
+        @media (max-width: 640px) {
+            .demo-pair { grid-template-columns: 1fr; }
+        }
     </style>
 </head>
 
@@ -263,7 +365,20 @@
             <div class="swiper results-swiper">
                 <div class="swiper-wrapper">
 
-                    <!-- Slide 1: Distillation table -->
+                    <!-- Slide 1: Real-world results (default view) -->
+                    <div class="swiper-slide">
+                        <div class="slide-content">
+                            <p class="slide-title">Real-world: physical grasp success on held-out objects</p>
+                            <img src="./assets/figures/real_world_results.png" alt="Real-world validation results.">
+                            <p class="slide-caption">
+                                <b>Real-world validation.</b>
+                                Left: Overall grasp success.
+                                Right: Failure attribution analysis for each of the different methods.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Slide 2: Distillation table -->
                     <div class="swiper-slide">
                         <div class="slide-content">
                             <p class="slide-title">Simulation: distillation on 100 held-out ShapeNetSem objects</p>
@@ -375,19 +490,6 @@
                         </div>
                     </div>
 
-                    <!-- Slide 3: Real-world results -->
-                    <div class="swiper-slide">
-                        <div class="slide-content">
-                            <p class="slide-title">Real-world: physical grasp success on held-out objects</p>
-                            <img src="./assets/figures/real_world_results.png" alt="Real-world validation results.">
-                            <p class="slide-caption">
-                                <b>Real-world validation.</b>
-                                Left: Overall grasp success.
-                                Right: Failure attribution analysis for each of the different methods.
-                            </p>
-                        </div>
-                    </div>
-
                 </div>
 
                 <div class="swiper-pagination"></div>
@@ -400,12 +502,8 @@
     <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
     <script>
         var resultsSwiper = new Swiper('.results-swiper', {
-            loop: true,
+            loop: false,
             autoHeight: true,
-            autoplay: {
-                delay: 6000,
-                disableOnInteraction: false,
-            },
             pagination: {
                 el: '.swiper-pagination',
                 clickable: true,
@@ -420,10 +518,99 @@
     <section class="section" id="demos">
         <div class="container is-max-desktop">
             <div class="columns is-centered has-text-centered">
-                <h2 class="title is-3" style="margin-top: 40px;">Demos</h2>
+                <h2 class="title is-3" style="margin-top: 40px;">Real-World Demos</h2>
             </div>
-            <p class="coming-soon">Coming soon.</p>
+            <h2 class="subtitle has-text-centered">
+                Selected real-world rollouts on held-out objects where standard fine-tuning fails
+                to produce a stable grasp. Each pair shows the same held-out object: a policy
+                fine-tuned only on nominal meshes (left) versus the same policy further fine-tuned
+                with <b>CrashGen</b>-generated variants (right). These cases highlight failure
+                modes that blue-teaming recovers; aggregate success rates over all trials are
+                reported in the results above.
+            </h2>
+
+            <!-- Category tabs -->
+            <div class="demo-tabs">
+                <button class="demo-tab-btn is-active" data-cat="v">Vases</button>
+                <button class="demo-tab-btn" data-cat="t">Tools</button>
+            </div>
+
+            <!-- Trial picker -->
+            <div class="demo-trial-row">
+                <p class="demo-trial-hint">Select a trial:</p>
+                <div class="demo-trial-strip" id="demo-trial-strip"></div>
+            </div>
+
+            <!-- Paired videos -->
+            <div class="demo-pair" id="demo-pair">
+                <div class="demo-cell">
+                    <p class="demo-cell-label">Standard Fine-tuning</p>
+                    <video id="demo-video-base" autoplay muted loop playsinline></video>
+                </div>
+                <div class="demo-cell is-ours">
+                    <p class="demo-cell-label">CrashGen Blue-teaming (Ours)</p>
+                    <video id="demo-video-ours" autoplay muted loop playsinline></video>
+                </div>
+            </div>
         </div>
+
+        <script>
+            (function () {
+                var trialCounts = { v: 10, t: 3 };
+                var currentCat = 'v';
+                var currentTrial = 1;
+
+                var strip = document.getElementById('demo-trial-strip');
+                var baseVid = document.getElementById('demo-video-base');
+                var oursVid = document.getElementById('demo-video-ours');
+
+                function renderTrialButtons() {
+                    var n = trialCounts[currentCat];
+                    var html = '';
+                    for (var i = 1; i <= n; i++) {
+                        html += '<button class="demo-trial-btn' + (i === currentTrial ? ' is-active' : '')
+                              + '" data-trial="' + i + '">' + i + '</button>';
+                    }
+                    strip.innerHTML = html;
+                    strip.querySelectorAll('.demo-trial-btn').forEach(function (btn) {
+                        btn.addEventListener('click', function () {
+                            currentTrial = parseInt(btn.dataset.trial, 10);
+                            strip.querySelectorAll('.demo-trial-btn').forEach(function (b) {
+                                b.classList.remove('is-active');
+                            });
+                            btn.classList.add('is-active');
+                            loadVideos();
+                        });
+                    });
+                }
+
+                function loadVideos() {
+                    var baseSrc = './assets/videos/' + currentCat + 'b' + currentTrial + '.mp4';
+                    var oursSrc = './assets/videos/' + currentCat + 'o' + currentTrial + '.mp4';
+                    baseVid.src = baseSrc;
+                    oursVid.src = oursSrc;
+                    // Restart both from frame 0 so the comparison stays in sync.
+                    baseVid.load();
+                    oursVid.load();
+                }
+
+                document.querySelectorAll('.demo-tab-btn').forEach(function (btn) {
+                    btn.addEventListener('click', function () {
+                        document.querySelectorAll('.demo-tab-btn').forEach(function (b) {
+                            b.classList.remove('is-active');
+                        });
+                        btn.classList.add('is-active');
+                        currentCat = btn.dataset.cat;
+                        currentTrial = 1;
+                        renderTrialButtons();
+                        loadVideos();
+                    });
+                });
+
+                renderTrialButtons();
+                loadVideos();
+            })();
+        </script>
     </section>
 </body>
 
